@@ -24,12 +24,6 @@ const Navbar = () => {
           >
             <History size={18} className="mr-1" /> History
           </a>
-          <a
-            href="/about"
-            className="text-[#5E936C] font-medium hover:text-[#3E5F44] transition-colors flex items-center"
-          >
-            <BookOpen size={18} className="mr-1" /> About Us
-          </a>
         </nav>
       </header>
   );
