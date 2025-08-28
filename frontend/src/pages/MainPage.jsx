@@ -11,16 +11,17 @@ import {
   Zap,
   Cloud,
   Loader2,
+  BookType
 } from "lucide-react";
 import { usePlantStore } from "../store/usePlantStore";
 import { toBase64 } from "../libs/base64Conversion.js";
 import PlantCard from "../components/PlantCard.jsx";
+import Navbar from "../components/Navbar.jsx";
 
 const MainPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [showResults, setShowResults] = useState(false);
-  const [isScanning, setIsScanning] = useState(false);
-  const { isLoading, getInfo } = usePlantStore();
+  const { isLoading, getInfo,plantInfo } = usePlantStore();
   const uploadRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState(null);
@@ -80,35 +81,7 @@ const MainPage = () => {
   return (
     <div className="min-h-screen   font-sans text-[#2c3e30]">
       {/* Header */}
-      <header className="container mx-auto px-4 py-6 flex justify-between items-center">
-        <div className="flex items-center space-x-3">
-          <div className="bg-[#3E5F44] text-[#E8FFD7] w-12 h-12 rounded-xl flex items-center justify-center shadow-md">
-            <Leaf size={28} />
-          </div>
-          <h1 className="text-2xl font-bold text-[#3E5F44]">PlanTify</h1>
-        </div>
-
-        <nav className="hidden md:flex space-x-8">
-          <a
-            href="#"
-            className="text-[#5E936C] font-medium hover:text-[#3E5F44] transition-colors flex items-center"
-          >
-            <Sparkles size={18} className="mr-1" /> Identify
-          </a>
-          <a
-            href="#"
-            className="text-[#5E936C] font-medium hover:text-[#3E5F44] transition-colors flex items-center"
-          >
-            <History size={18} className="mr-1" /> History
-          </a>
-          <a
-            href="#"
-            className="text-[#5E936C] font-medium hover:text-[#3E5F44] transition-colors flex items-center"
-          >
-            <BookOpen size={18} className="mr-1" /> About Us
-          </a>
-        </nav>
-      </header>
+      <Navbar />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
@@ -159,7 +132,7 @@ const MainPage = () => {
         ${
           isDragging
             ? "border-green-500 bg-green-50"
-            : "border-gray-400 bg-gray-100"
+            : "border-gray-400 bg-gray-50"
         }`}
                 onDragOver={(e) => {
                   e.preventDefault();
@@ -229,7 +202,9 @@ const MainPage = () => {
             {/* Results Area */}
           </div>
           {/* {plantInfo && ( */}
-            <PlantCard />
+            {plantInfo ? 
+              <PlantCard /> : <div className="text-3xl flex items-center justify-center mt-20 gap-3 h-20 text-[#3E5F44] hover:bg-gradient-to-br from-[#5E936C] to-[#93DA97] hover:text-white  transition-all hover:rounded-xl"> <BookType size={25} /> Your Result will Show Here</div>
+            }
           {/* )} */}
         </section>
 

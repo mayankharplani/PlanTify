@@ -23,11 +23,11 @@ const GeneralInfo = ({ plantGeneralInfo }) => {
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
       {/* Header with Image */}
-      <div className="relative h-64 overflow-hidden">
+      <div className="relative h-84 overflow-hidden">
         <img
           src={plantGeneralInfo.similar_image}
           alt={plantGeneralInfo.name}
-          className="w-full h-full object-cover"
+          className="w-[100%] h-[100%] object-cover"
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
           <h2 className="text-2xl font-bold">{plantGeneralInfo.name}</h2>
@@ -209,8 +209,8 @@ const GeneralInfo = ({ plantGeneralInfo }) => {
             <h3 className="text-sm font-medium text-[#5E936C] mb-2">
               Propagation Methods
             </h3>
-            {plantGeneralInfo.propagationMethods.map((pm, key) => (
-              <p className="text-[#3E5F44]" id={key}>
+            {plantGeneralInfo.propagationMethods.map((pm,index) => (
+              <p className="text-[#3E5F44]" key={index}>
                 {pm}
               </p>
             ))}
