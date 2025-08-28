@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import {
-  Camera,
   Leaf,
   BookOpen,
   History,
@@ -11,38 +10,41 @@ import {
   Search,
   Zap,
   Cloud,
+  Loader2,
 } from "lucide-react";
 import { usePlantStore } from "../store/usePlantStore";
+import { toBase64 } from "../libs/base64Conversion.js";
+import PlantCard from "../components/PlantCard.jsx";
 
 const MainPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
-  const { isLoading, plantInfo, getInfo } = usePlantStore();
+  const { isLoading, getInfo } = usePlantStore();
   const uploadRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [file, setFile] = useState(null);
 
-  // Mock plant data
-  const plantData = {
-    name: "Monstera Deliciosa",
-    scientificName: "Monstera deliciosa",
-    commonNames: ["Swiss Cheese Plant", "Split-leaf Philodendron"],
-    description:
-      "A species of flowering plant native to tropical forests of southern Mexico. Known for its large, glossy leaves with natural holes.",
-    care: {
-      water:
-        "Water every 1-2 weeks, allowing soil to dry out between waterings",
-      light: "Thrives in bright, indirect light",
-      humidity: "Prefers high humidity environments",
-      temperature: "Ideal temperature between 65-85°F (18-30°C)",
-    },
-    health: "Healthy",
-    toxicity: "Toxic to pets if ingested",
+
+  const handleSubmit = async () => {
+    console.log("file: ", file);
+    if (!file) return;
+
+    try {
+      const base64Image = await toBase64(file);
+      console.log(base64Image);
+      const body = {
+        images: [base64Image],
+        similar_images: true,
+        health: "all",
+        classification_level: "all",
+      };
+      console.log(body);
+      await getInfo(body);
+    } catch (error) {
+      console.log("Error in Handle Submit: ", error);
+    }
   };
-
-  const handleSubmit = () => {
-    console.log(selectedImage)
-  }
 
   const handleFile = (file) => {
     if (file && file.type.startsWith("image/")) {
@@ -71,6 +73,7 @@ const MainPage = () => {
 
   const handleChange = (e) => {
     const file = e.target.files[0];
+    setFile(file);
     handleFile(file);
   };
 
@@ -124,7 +127,6 @@ const MainPage = () => {
             onClick={handleScroll}
             className="bg-gradient-to-r from-[#3E5F44] to-[#5E936C] text-white px-8 py-4 rounded-xl font-medium flex items-center justify-center mx-auto space-x-3 hover:from-[#5E936C] hover:to-[#3E5F44] transition-all shadow-lg transform hover:-translate-y-1"
           >
-            {/* <Camera size={22} /> */}
             <span>Scan a Plant</span>
             <Zap size={18} className="ml-1" />
           </button>
@@ -151,7 +153,7 @@ const MainPage = () => {
                   Drag & drop or click to upload a clear photo of a plant
                 </p>
               </div>
-              
+
               <div
                 className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition 
         ${
@@ -180,9 +182,17 @@ const MainPage = () => {
                     <img
                       src={selectedImage}
                       alt="Preview"
-                      className="max-h-72 mx-auto rounded-lg shadow-md"
+                      className={`max-h-72 w-lg mx-auto rounded-lg shadow-md transition ${
+                        isLoading ? "opacity-50" : "opacity-100"
+                      }`}
                     />
-                    <button
+                    {isLoading && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      </div>
+                    )}
+                    {!isLoading && (
+                      <button
                       onClick={(e) => {
                         e.stopPropagation();
                         resetImage();
@@ -191,6 +201,7 @@ const MainPage = () => {
                     >
                       <X />
                     </button>
+                    )}
                   </div>
                 ) : (
                   <div>
@@ -201,104 +212,25 @@ const MainPage = () => {
                   </div>
                 )}
               </div>
-              {
-                selectedImage ? <div className="flex items-center justify-center">
-                <button 
-                onClick={handleSubmit}
-                className="mt-8 w-auto bg-white text-[#5E936C] px-5 py-2 rounded-xl cursor-pointer">Submit</button>
-              </div> : <p></p>
-              }
+              {selectedImage ? (
+                <div className="flex items-center justify-center">
+                  <button
+                    onClick={handleSubmit}
+                    className="mt-8 w-auto bg-white text-[#34a752] px-5 py-2 rounded-xl cursor-pointer"
+                  >
+                    Submit
+                  </button>
+                </div>
+              ) : (
+                <p></p>
+              )}
             </div>
 
             {/* Results Area */}
-            <div className="flex-1 bg-white rounded-2xl p-8 shadow-xl">
-              <h3 className="text-2xl font-bold text-[#3E5F44] mb-6 flex items-center">
-                <Search size={24} className="mr-2" /> Plant Information
-              </h3>
-
-              {showResults ? (
-                <div className="space-y-8">
-                  <div className="flex flex-col sm:flex-row items-start gap-6">
-                    <div className="w-full sm:w-40 h-40 bg-gradient-to-r from-[#c1dfc4] to-[#93DA97] rounded-2xl flex items-center justify-center text-[#3E5F44] font-bold shadow-md">
-                      Plant Image
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-2xl font-bold text-[#3E5F44]">
-                        {plantData.name}
-                      </h4>
-                      <p className="text-[#5E936C] italic mb-3">
-                        {plantData.scientificName}
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {plantData.commonNames.map((name, index) => (
-                          <span
-                            key={index}
-                            className="bg-[#E8FFD7] text-[#3E5F44] px-3 py-1.5 rounded-full text-sm font-medium"
-                          >
-                            {name}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-[#f8fdf4] p-5 rounded-2xl">
-                      <h5 className="text-lg font-semibold text-[#3E5F44] mb-3 flex items-center">
-                        <Leaf size={20} className="mr-2" /> Description
-                      </h5>
-                      <p className="text-[#5E936C]">{plantData.description}</p>
-                    </div>
-
-                    <div className="bg-[#f8fdf4] p-5 rounded-2xl">
-                      <h5 className="text-lg font-semibold text-[#3E5F44] mb-3">
-                        Plant Health
-                      </h5>
-                      <div className="inline-flex items-center bg-[#E8FFD7] text-[#3E5F44] px-4 py-2 rounded-full font-medium">
-                        {plantData.health}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-[#f8fdf4] p-5 rounded-2xl">
-                    <h5 className="text-lg font-semibold text-[#3E5F44] mb-3">
-                      Care Instructions
-                    </h5>
-                    <ul className="space-y-3">
-                      {Object.entries(plantData.care).map(([key, value]) => (
-                        <li key={key} className="flex items-start">
-                          <div className="w-2 h-2 bg-[#93DA97] rounded-full mt-2.5 mr-3 flex-shrink-0"></div>
-                          <span className="text-[#5E936C]">
-                            <span className="font-medium capitalize">
-                              {key}:
-                            </span>{" "}
-                            {value}
-                          </span>
-                        </li>
-                      ))}
-                      <li className="flex items-start">
-                        <div className="w-2 h-2 bg-[#93DA97] rounded-full mt-2.5 mr-3 flex-shrink-0"></div>
-                        <span className="text-[#5E936C]">
-                          <span className="font-medium">Toxicity:</span>{" "}
-                          {plantData.toxicity}
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4 opacity-30">🔍</div>
-                  <p className="text-[#5E936C]">
-                    Your results will appear here after scanning
-                  </p>
-                  <p className="text-sm text-[#93DA97] mt-2">
-                    We support identification of over 20,000 plant species
-                  </p>
-                </div>
-              )}
-            </div>
           </div>
+          {/* {plantInfo && ( */}
+            <PlantCard />
+          {/* )} */}
         </section>
 
         {/* Features Section */}
