@@ -30,7 +30,9 @@ const HealthInfo = ({ plantHealthInfo }) => {
 
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+
       {/* Health Status Header */}
+
       <div className={`p-6 text-white ${plantHealthInfo.isHealthy ? 'bg-[#5E936C]' : 'bg-[#D99E41]'}`}>
         <div className="flex items-center">
           <div className="p-3 rounded-full bg-white/20 mr-4">
@@ -59,7 +61,9 @@ const HealthInfo = ({ plantHealthInfo }) => {
       </div>
 
       {/* Content */}
+
       <div className="p-6">
+
         {/* Always show healthy status message */}
         {plantHealthInfo.isHealthy && (
           <div className="bg-green-50 border border-green-200 rounded-xl p-5 mb-6">
@@ -78,6 +82,7 @@ const HealthInfo = ({ plantHealthInfo }) => {
         )}
 
         {/* Show disease information if any exist */}
+
         {plantHealthInfo.diseases && plantHealthInfo.diseases.length > 0 ? (
           <>
             <div className="mb-6">
@@ -94,7 +99,9 @@ const HealthInfo = ({ plantHealthInfo }) => {
             <div className="space-y-4">
               {plantHealthInfo.diseases.map((disease, index) => (
                 <div key={disease.id} className="border border-[#93DA97] rounded-xl overflow-hidden">
+
                   {/* Disease Header */}
+
                   <div 
                     className="bg-[#f8fdf4] p-4 flex justify-between items-center cursor-pointer"
                     onClick={() => toggleDisease(disease.id)}
@@ -129,9 +136,12 @@ const HealthInfo = ({ plantHealthInfo }) => {
                   </div>
 
                   {/* Expanded Disease Details */}
+
                   {expandedDisease === disease.id && (
                     <div className="p-4 bg-white">
+
                       {/* Description */}
+
                       {disease.details?.description && (
                         <div className="mb-4">
                           <h5 className="text-sm font-medium text-[#3E5F44] mb-2 flex items-center">
@@ -142,6 +152,7 @@ const HealthInfo = ({ plantHealthInfo }) => {
                       )}
 
                       {/* Common Names */}
+
                       {disease.details?.common_names && disease.details.common_names.length > 0 && (
                         <div className="mb-4">
                           <h5 className="text-sm font-medium text-[#3E5F44] mb-2">Also Known As</h5>
@@ -156,6 +167,7 @@ const HealthInfo = ({ plantHealthInfo }) => {
                       )}
 
                       {/* Similar Images */}
+
                       {disease.similar_images && disease.similar_images.length > 0 && (
                         <div className="mb-4">
                           <h5 className="text-sm font-medium text-[#3E5F44] mb-2">Similar Cases</h5>
@@ -179,6 +191,7 @@ const HealthInfo = ({ plantHealthInfo }) => {
                       )}
 
                       {/* External Link */}
+
                       {disease.details?.url && (
                         <div>
                           <a 
@@ -199,6 +212,7 @@ const HealthInfo = ({ plantHealthInfo }) => {
             </div>
 
             {/* Treatment Recommendations - Show different advice based on health status */}
+
             <div className="mt-8 bg-[#f8fdf4] p-5 rounded-xl">
               <h3 className="text-lg font-semibold text-[#3E5F44] mb-3 flex items-center">
                 <Zap size={20} className="mr-2" /> 
@@ -248,6 +262,7 @@ const HealthInfo = ({ plantHealthInfo }) => {
               </div>
               
               {/* Additional note for healthy plants with minor issues */}
+              
               {plantHealthInfo.isHealthy && hasSignificantDiseases && (
                 <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                   <p className="text-amber-700 text-sm">

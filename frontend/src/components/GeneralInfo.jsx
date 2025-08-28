@@ -6,8 +6,6 @@ import {
   Sun,
   Sprout,
   Trees,
-  Droplets,
-  Shield,
   Sparkles,
 } from "lucide-react";
 
@@ -22,7 +20,9 @@ const GeneralInfo = ({ plantGeneralInfo }) => {
 
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+
       {/* Header with Image */}
+
       <div className="relative h-84 overflow-hidden">
         <img
           src={plantGeneralInfo.similar_image}
@@ -49,8 +49,11 @@ const GeneralInfo = ({ plantGeneralInfo }) => {
       </div>
 
       {/* Content */}
+
       <div className="p-6">
+
         {/* Common Names */}
+
         {plantGeneralInfo.commonNames &&
           plantGeneralInfo.commonNames.length > 0 && (
             <div className="mb-6">
@@ -71,6 +74,7 @@ const GeneralInfo = ({ plantGeneralInfo }) => {
           )}
 
         {/* Description */}
+
         {plantGeneralInfo.description && (
           <div className="mb-6">
             <h3 className="text-sm font-medium text-[#5E936C] mb-2 flex items-center">
@@ -83,6 +87,7 @@ const GeneralInfo = ({ plantGeneralInfo }) => {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           {/* Taxonomy */}
           <div>
             <h3 className="text-sm font-medium text-[#5E936C] mb-3 flex items-center">
@@ -141,6 +146,7 @@ const GeneralInfo = ({ plantGeneralInfo }) => {
               </div>
             </div>
           </div>
+
 
           {/* Growing Conditions */}
           <div>

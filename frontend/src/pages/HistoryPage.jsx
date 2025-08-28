@@ -1,10 +1,10 @@
 import React from "react";
 import { usePlantStore } from "../store/usePlantStore.js";
 import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
  
 const HistoryPage = () => {
   const {history} = usePlantStore();
-  console.log(history);
   
   return (
    <div className="min-h-screen">
@@ -22,6 +22,7 @@ const HistoryPage = () => {
               className="p-4 bg-white shadow rounded-2xl border border-gray-100 hover:shadow-md transition"
             >
               {/* Plant Image */}
+
               {plant?.result?.classification.suggestions[0].similar_images?.length > 0 && (
                 <img
                   src={plant?.result.classification.suggestions[0].similar_images[0].url}
@@ -31,11 +32,13 @@ const HistoryPage = () => {
               )}
 
               {/* Plant Name */}
+
               <h3 className="text-lg font-semibold text-[#2C4A37]">
                 {plant?.result.classification.suggestions[0].name || "Unknown Plant"}
               </h3>
 
               {/* Extra Info */}
+
               <p className="text-sm text-gray-600">
                 Family Name:{" "}
                 <span className="italic">
@@ -50,6 +53,7 @@ const HistoryPage = () => {
         </div>
       )}
     </div>
+    <Footer/>
    </div>
   );
 };

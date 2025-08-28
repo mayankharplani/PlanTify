@@ -1,15 +1,11 @@
 import React, { useState, useRef } from "react";
 import {
-  Leaf,
   BookOpen,
   History,
-  ChevronRight,
   Upload,
   X,
   Sparkles,
-  Search,
   Zap,
-  Cloud,
   Loader2,
   BookType
 } from "lucide-react";
@@ -17,36 +13,34 @@ import { usePlantStore } from "../store/usePlantStore";
 import { toBase64 } from "../libs/base64Conversion.js";
 import PlantCard from "../components/PlantCard.jsx";
 import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 
 const MainPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [showResults, setShowResults] = useState(false);
   const { isLoading, getInfo,plantInfo } = usePlantStore();
   const uploadRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState(null);
 
-
+  {/* Function which is handling Submit Button Call to Api */}
   const handleSubmit = async () => {
-    console.log("file: ", file);
     if (!file) return;
 
     try {
       const base64Image = await toBase64(file);
-      console.log(base64Image);
       const body = {
         images: [base64Image],
         similar_images: true,
         health: "all",
         classification_level: "all",
       };
-      console.log(body);
       await getInfo(body);
     } catch (error) {
       console.log("Error in Handle Submit: ", error);
     }
   };
 
+  {/* Function which createes blob of image to preview */}
   const handleFile = (file) => {
     if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
@@ -54,6 +48,8 @@ const MainPage = () => {
     }
   };
 
+
+  {/* Function which resets  image */}
   const resetImage = () => {
     if (selectedImage) {
       URL.revokeObjectURL(selectedImage); // cleanup
@@ -84,8 +80,11 @@ const MainPage = () => {
       <Navbar />
 
       {/* Main Content */}
+
       <main className="container mx-auto px-4 py-8">
+
         {/* Hero Section */}
+
         <section className="text-center mb-16 max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-[#3E5F44] mb-6">
             Discover the World of Plants
@@ -96,7 +95,6 @@ const MainPage = () => {
             technology.
           </p>
           <button
-            // onClick={() => document.getElementById('file-upload').click()}
             onClick={handleScroll}
             className="bg-gradient-to-r from-[#3E5F44] to-[#5E936C] text-white px-8 py-4 rounded-xl font-medium flex items-center justify-center mx-auto space-x-3 hover:from-[#5E936C] hover:to-[#3E5F44] transition-all shadow-lg transform hover:-translate-y-1"
           >
@@ -113,9 +111,12 @@ const MainPage = () => {
         </section>
 
         {/* Scanner Section */}
+
         <section ref={uploadRef} className="mb-16">
           <div className="flex flex-col lg:flex-row gap-8">
+
             {/* Upload Area */}
+
             <div className="flex-1 bg-gradient-to-br from-[#5E936C] to-[#93DA97] rounded-2xl p-8 text-white shadow-xl">
               <div className="text-center mb-8">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl p-3 mb-4">
@@ -199,16 +200,14 @@ const MainPage = () => {
               )}
             </div>
 
-            {/* Results Area */}
           </div>
-          {/* {plantInfo && ( */}
             {plantInfo ? 
               <PlantCard /> : <div className="text-3xl flex items-center justify-center mt-20 gap-3 h-20 text-[#3E5F44] hover:bg-gradient-to-br from-[#5E936C] to-[#93DA97] hover:text-white  transition-all hover:rounded-xl"> <BookType size={25} /> Your Result will Show Here</div>
             }
-          {/* )} */}
         </section>
 
         {/* Features Section */}
+
         <section className="mb-20">
           <h3 className="text-3xl font-bold text-[#3E5F44] text-center mb-4">
             Why Choose PlantScan?
@@ -258,6 +257,7 @@ const MainPage = () => {
         </section>
 
         {/* How It Works Section */}
+
         <section className="bg-gradient-to-r from-[#E8FFD7] to-[#d0f0b6] rounded-2xl p-10 shadow-inner mb-16">
           <h3 className="text-3xl font-bold text-[#3E5F44] text-center mb-4">
             How It Works
@@ -305,102 +305,8 @@ const MainPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#3E5F44] text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-10 mb-12">
-            <div className="max-w-md">
-              <div className="flex items-center space-x-3 mb-5">
-                <Leaf size={28} />
-                <span className="text-2xl font-bold">PlantScan</span>
-              </div>
-              <p className="text-[#E8FFD7] mb-6">
-                Identify plants with a snap. The most accurate plant recognition
-                app.
-              </p>
-              <div className="flex space-x-4">
-                <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
-                  <span className="font-bold">f</span>
-                </div>
-                <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
-                  <span className="font-bold">t</span>
-                </div>
-                <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
-                  <span className="font-bold">in</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-10">
-              <div>
-                <h5 className="font-semibold mb-5 text-lg">Product</h5>
-                <ul className="space-y-3 text-[#E8FFD7]">
-                  <li>
-                    <a href="#" className="hover:text-white transition-colors">
-                      Features
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:text-white transition-colors">
-                      Pricing
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:text-white transition-colors">
-                      Examples
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h5 className="font-semibold mb-5 text-lg">Company</h5>
-                <ul className="space-y-3 text-[#E8FFD7]">
-                  <li>
-                    <a href="#" className="hover:text-white transition-colors">
-                      About
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:text-white transition-colors">
-                      Blog
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:text-white transition-colors">
-                      Careers
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h5 className="font-semibold mb-5 text-lg">Support</h5>
-                <ul className="space-y-3 text-[#E8FFD7]">
-                  <li>
-                    <a href="#" className="hover:text-white transition-colors">
-                      Help Center
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:text-white transition-colors">
-                      Contact
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:text-white transition-colors">
-                      Privacy Policy
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-[#5E936C] pt-8 text-center text-[#E8FFD7]">
-            <p>© 2023 PlantScan. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+            <Footer />
+      
     </div>
   );
 };
